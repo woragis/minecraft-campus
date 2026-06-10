@@ -14,7 +14,9 @@ Este projeto usa **git submodules**:
 
 ## Documentação
 
-Especificação completa e roadmap: [`CAMPUSWORLD.md`](CAMPUSWORLD.md)
+- Especificação e roadmap: [`CAMPUSWORLD.md`](CAMPUSWORLD.md)
+- Arquitetura: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
+- Setup Paper: [`docs/SETUP-PAPER.md`](docs/SETUP-PAPER.md)
 
 ## Clone
 
