@@ -1,0 +1,9 @@
+[submodule "backend"]
+	path = backend
+	url = git@github.com:woragis/minecraft-campus-backend.git
+[submodule "frontend"]
+	path = frontend
+	url = git@github.com:woragis/minecraft-campus-frontend.git
+[submodule "plugin"]
+	path = plugin
+	url = git@github.com:woragis/minecraft-campus-plugin.git
