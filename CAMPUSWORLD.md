@@ -92,14 +92,14 @@ Plugin CampusWorld
  │
  ▼
 
-Backend Spring Boot
+Backend Go (server/)
 
  │
  ├─ PostgreSQL
  ├─ Analytics Engine
  ├─ Trust Engine
  ├─ Rollback Engine
- └─ API REST / eventos
+ └─ API REST /v1
 
  │
  ▼
@@ -517,18 +517,16 @@ faculdade/
 │   └── resources/
 │       ├── plugin.yml
 │       └── config.yml
-├── backend/                # Spring Boot 3
-│   ├── src/main/java/...
-│   │   ├── controller/
-│   │   ├── service/
-│   │   ├── repository/
-│   │   ├── model/
-│   │   ├── dto/
-│   │   ├── trust/
-│   │   ├── analytics/
-│   │   ├── backup/
-│   │   ├── rollback/
-│   │   └── security/
+├── backend/                # Go (padrão Lingo)
+│   ├── migrations/
+│   ├── server/
+│   │   ├── cmd/server/main.go
+│   │   └── internal/
+│   │       ├── httpserver/
+│   │       ├── player/
+│   │       ├── invite/
+│   │       ├── trust/
+│   │       └── ...
 │   └── docker-compose.yml  # Postgres local
 ├── frontend/               # Next.js
 │   └── app/
@@ -551,7 +549,7 @@ faculdade/
 | Proxy | Velocity | moderno, forwarding, multi-backend |
 | Servidor | Paper 1.21+ | API estável, performance |
 | Plugin | Java 21 + Paper API | ecossistema maduro |
-| Backend | Spring Boot 3 + JPA | familiar, robusto, bom para domínio complexo |
+| Backend | Go 1.22 + GORM | rápido, leve em RAM, padrão handler/service/repository |
 | Banco | PostgreSQL 16 | JSONB, grafos via extensões, analytics |
 | Fila (fase 4+) | Redis ou RabbitMQ | auditoria assíncrona |
 | Frontend | Next.js 15 + Tailwind | SSR, dashboard, mapa embed |
