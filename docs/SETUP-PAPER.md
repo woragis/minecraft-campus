@@ -1,12 +1,13 @@
 # Setup Paper — CampusWorld Fase 1
 
-Guia para testar whitelist + convites in-game. **Não precisa do launcher Mojang** — só JDK 21 e o jar do Paper.
+Guia para testar whitelist + convites in-game.
 
 ## Pré-requisitos
 
-- JDK 21
+- **JDK 25** (Paper 26.1+; `./gradlew build` no plugin baixa via toolchain)
 - Docker (para backend + Postgres)
-- Download do [Paper 1.21](https://papermc.io/downloads/paper)
+- Download do [Paper 26.1](https://papermc.io/downloads/paper) (ex.: `paper-26.1.2-69.jar`)
+- Cliente **Minecraft Java 26.1** no launcher
 
 ## 1. Backend
 
@@ -53,12 +54,21 @@ server:
 
 ## 3. Paper
 
+Pasta de dev local: `plugin/paper-server/` (já tem `start.bat`).
+
 ```bash
-mkdir campus-paper && cd campus-paper
-# copie o paper-*.jar baixado
+cd plugin
+./gradlew build
+cp build/libs/CampusWorld-0.1.0.jar paper-server/plugins/
+cp paper-26.1.2-69.jar paper-server/
+cd paper-server
 echo "eula=true" > eula.txt
-java -jar paper-*.jar nogui
+# Windows: start.bat
+# ou Java 25 explícito:
+java -Xms2G -Xmx4G -jar paper-26.1.2-69.jar --nogui
 ```
+
+**Seed:** edite `server.properties` → `level-seed=` **antes** da primeira geração. Apague `world/` se já existir.
 
 Na primeira execução o Paper gera `server.properties`. Reinicie após instalar o plugin.
 
@@ -71,7 +81,7 @@ Na primeira execução o Paper gera `server.properties`. Reinicie após instalar
 5. Verificar no backend:
 
 ```bash
-curl http://127.0.0.1:8080/v1/players/minecraft/<uuid-do-amigo>
+curl http://127.0.0.1:8080/v1/lookup/players/minecraft/<uuid-do-amigo>
 ```
 
 ## Troubleshooting
@@ -79,9 +89,12 @@ curl http://127.0.0.1:8080/v1/players/minecraft/<uuid-do-amigo>
 | Problema | Solução |
 |----------|---------|
 | Kick "precisa de convite" | Rodar `/invite` antes; username deve bater |
-| Kick "indisponível" | API fora do ar ou `plugin-key` errado |
-| Fundador não entra | Definir `BOOTSTRAP_MINECRAFT_UUID` e reiniciar API |
+| Kick "indisponível" | API fora do ar ou `plugin-key` errado (deve bater com `PLUGIN_API_KEY` no `.env`) |
+| Fundador não entra | Definir `BOOTSTRAP_MINECRAFT_UUID` no `backend/.env`, `docker compose up -d --build api` |
+| API reiniciando no Docker | Ver `docker compose logs api`; schema é só via SQL migrations (sem GORM AutoMigrate) |
 | Plugin não conecta | Checar `base-url` e firewall |
+| `requires Java 25` | Usar Temurin 25 ou `paper-server/start.bat` |
+| Versão incompatível no cliente | Launcher deve estar em **26.1**, não 1.21.x |
 
 ## Próximo passo
 
