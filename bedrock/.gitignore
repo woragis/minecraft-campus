@@ -1,0 +1,7 @@
+# Runtime data
+/world/
+/players/
+/resources/
+
+# Local env
+.env
