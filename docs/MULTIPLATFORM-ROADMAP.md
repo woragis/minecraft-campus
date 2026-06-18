@@ -100,13 +100,15 @@ Plano de implementação Bedrock (Dragonfly) + cross-play (Geyser), dividido em 
 
 ---
 
-## Fase 5 — Presença e stats (futuro)
+## Fase 5 — Presença e stats ✅
 
-- Redis: jogadores online por servidor/guilda
-- Dragonfly/Paper: heartbeat ou eventos join/quit
-- Frontend: guildas online, playtime, mob kills
+- [x] Redis: jogadores online por servidor/guilda
+- [x] Dragonfly/Paper: heartbeat + eventos join/quit
+- [x] Frontend: guildas online, overview de presença
 
-**Depende de:** Fases 1–4 estáveis.
+Ver [PHASE-5-PRESENCE.md](./PHASE-5-PRESENCE.md).
+
+**Commits:** `backend/`, `plugin/`, `bedrock/`, `frontend/`, parent docs
 
 ---
 

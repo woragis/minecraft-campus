@@ -20,6 +20,7 @@ Este projeto usa **git submodules**:
 - Setup Paper: [`docs/SETUP-PAPER.md`](docs/SETUP-PAPER.md)
 - Bedrock (Dragonfly): [`bedrock/README.md`](bedrock/README.md)
 - Cross-play (Geyser): [`docs/SETUP-GEYSER.md`](docs/SETUP-GEYSER.md)
+- Presença ao vivo: [`docs/PHASE-5-PRESENCE.md`](docs/PHASE-5-PRESENCE.md)
 - Decisão multiplataforma: [`docs/BEDROCK-DECISION.md`](docs/BEDROCK-DECISION.md)
 - Roadmap multiplataforma: [`docs/MULTIPLATFORM-ROADMAP.md`](docs/MULTIPLATFORM-ROADMAP.md)
 - Deploy Railway: [`docs/RAILWAY-DEPLOY.md`](docs/RAILWAY-DEPLOY.md)
