@@ -24,6 +24,11 @@ type WhitelistResult struct {
 	Reason  string `json:"reason"`
 }
 
+type PlayerUpsertResult struct {
+	ID       string `json:"id"`
+	Username string `json:"username"`
+}
+
 func NewClient(baseURL, apiKey, serverSlug string) *Client {
 	baseURL = strings.TrimRight(strings.TrimSpace(baseURL), "/")
 	if serverSlug == "" {
@@ -69,7 +74,7 @@ func (c *Client) CheckBedrockWhitelist(ctx context.Context, xuid, username strin
 	return &out, nil
 }
 
-func (c *Client) UpsertBedrockPlayer(ctx context.Context, xuid, username string) error {
+func (c *Client) UpsertBedrockPlayer(ctx context.Context, xuid, username string) (*PlayerUpsertResult, error) {
 	payload := map[string]string{
 		"xuid":       strings.TrimSpace(xuid),
 		"username":   strings.TrimSpace(username),
@@ -77,28 +82,71 @@ func (c *Client) UpsertBedrockPlayer(ctx context.Context, xuid, username string)
 	}
 	data, err := json.Marshal(payload)
 	if err != nil {
-		return fmt.Errorf("encode upsert: %w", err)
+		return nil, fmt.Errorf("encode upsert: %w", err)
 	}
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, c.baseURL+"/v1/internal/players/bedrock/upsert", bytes.NewReader(data))
 	if err != nil {
-		return fmt.Errorf("new upsert request: %w", err)
+		return nil, fmt.Errorf("new upsert request: %w", err)
 	}
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-Plugin-Key", c.apiKey)
 
 	resp, err := c.http.Do(req)
 	if err != nil {
-		return fmt.Errorf("upsert request: %w", err)
+		return nil, fmt.Errorf("upsert request: %w", err)
 	}
 	defer resp.Body.Close()
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return fmt.Errorf("read upsert response: %w", err)
+		return nil, fmt.Errorf("read upsert response: %w", err)
 	}
 	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("upsert status %d: %s", resp.StatusCode, string(body))
+		return nil, fmt.Errorf("upsert status %d: %s", resp.StatusCode, string(body))
+	}
+	var out PlayerUpsertResult
+	if err := json.Unmarshal(body, &out); err != nil {
+		return nil, fmt.Errorf("decode upsert: %w", err)
+	}
+	return &out, nil
+}
+
+func (c *Client) PresenceOffline(ctx context.Context, playerID string) error {
+	return c.postPresence(ctx, "/v1/internal/presence/offline", playerID)
+}
+
+func (c *Client) PresenceHeartbeat(ctx context.Context, playerID string) error {
+	return c.postPresence(ctx, "/v1/internal/presence/heartbeat", playerID)
+}
+
+func (c *Client) postPresence(ctx context.Context, path, playerID string) error {
+	payload := map[string]string{
+		"playerId":   strings.TrimSpace(playerID),
+		"serverSlug": c.serverSlug,
+	}
+	data, err := json.Marshal(payload)
+	if err != nil {
+		return fmt.Errorf("encode presence: %w", err)
+	}
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, c.baseURL+path, bytes.NewReader(data))
+	if err != nil {
+		return fmt.Errorf("new presence request: %w", err)
+	}
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("X-Plugin-Key", c.apiKey)
+
+	resp, err := c.http.Do(req)
+	if err != nil {
+		return fmt.Errorf("presence request: %w", err)
+	}
+	defer resp.Body.Close()
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return fmt.Errorf("read presence response: %w", err)
+	}
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("presence status %d: %s", resp.StatusCode, string(body))
 	}
 	return nil
 }
