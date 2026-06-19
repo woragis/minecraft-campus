@@ -31,11 +31,11 @@ Frontend
 
 ### Entregas
 
-- Migration `000014_player_stats.sql` — `mob_kills` em `server_players`
-- `stats` service: ingest + aggregate
-- `POST /v1/internal/stats/ingest`
-- `GET /v1/players/{id}/stats`
-- `GET /v1/internal/players/{id}/hud` (guilda, status, online da guilda)
+- [x] Migration `000014_player_stats.sql` — `mob_kills` em `server_players`
+- [x] `stats` service: ingest + aggregate
+- [x] `POST /v1/internal/stats/ingest`
+- [x] `GET /v1/players/{id}/stats`
+- [x] `GET /v1/internal/players/{id}/hud` (guilda, status, online da guilda)
 
 **Commit:** submodule `backend/`
 
@@ -45,10 +45,10 @@ Frontend
 
 ### Entregas
 
-- Playtime: join timestamp → quit ingest
-- `MobKillListener` (EntityDeathEvent)
-- `ActionBarTask` + tab prefix com guild tag
-- Config `features.stats`, `features.hud`
+- [x] Playtime: join timestamp → quit ingest
+- [x] `MobKillListener` (EntityDeathEvent)
+- [x] `ActionBarTask` + tab prefix com guild tag
+- [x] Config `features.stats`, `features.hud`
 
 **Commit:** submodule `plugin/`
 
@@ -58,9 +58,9 @@ Frontend
 
 ### Entregas
 
-- Playtime no quit
-- Mob kill via handler de ataque (living non-player)
-- `SendTip` periódico com guilda/status/online
+- [x] Playtime no quit
+- [x] Mob kill via handler de ataque (living non-player, killing blow)
+- [x] `SendTip` periódico com guilda/status/online
 
 **Commit:** parent `bedrock/`
 
@@ -70,9 +70,9 @@ Frontend
 
 ### Entregas
 
-- `/players/[id]` — perfil, guilda, stats
-- `/guilds/[slug]` — membros, online, trust
-- Home com links para guildas
+- [x] `/players/[id]` — perfil, guilda, stats
+- [x] `/guilds/[slug]` — membros, online, trust
+- [x] Home com links para guildas
 
 **Commit:** submodule `frontend/`
 
