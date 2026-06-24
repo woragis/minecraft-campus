@@ -95,6 +95,7 @@ curl http://127.0.0.1:8080/v1/lookup/players/minecraft/<uuid-do-amigo>
 | Plugin não conecta | Checar `base-url` e firewall |
 | `requires Java 25` | Usar Temurin 25 ou `paper-server/start.bat` |
 | Versão incompatível no cliente | Launcher deve estar em **26.1**, não 1.21.x |
+| Deploy na nuvem | Ver [RAILWAY-DEPLOY.md](./RAILWAY-DEPLOY.md) |
 
 ## Próximo passo
 

@@ -123,9 +123,21 @@ func (c *Client) PresenceHeartbeat(ctx context.Context, playerID string) error {
 type HUDResult struct {
 	Username         string `json:"username"`
 	Status           string `json:"status"`
-	GuildID          string `json:"guildId"`
-	GuildName        string `json:"guildName"`
-	GuildSlug        string `json:"guildSlug"`
+	AffiliationType  string `json:"affiliationType"`
+	UniversitySlug   string `json:"universitySlug,omitempty"`
+	FacultySlug      string `json:"facultySlug,omitempty"`
+	CourseSlug       string `json:"courseSlug,omitempty"`
+	UniversityName   string `json:"universityName,omitempty"`
+	UniversityHex    string `json:"universityHex,omitempty"`
+	FacultyName      string `json:"facultyName,omitempty"`
+	FacultyAbbr      string `json:"facultyAbbr,omitempty"`
+	FacultyHex       string `json:"facultyHex,omitempty"`
+	CourseName       string `json:"courseName,omitempty"`
+	CourseAbbr       string `json:"courseAbbr,omitempty"`
+	CourseHex        string `json:"courseHex,omitempty"`
+	GuildID          string `json:"guildId,omitempty"`
+	GuildName        string `json:"guildName,omitempty"`
+	GuildSlug        string `json:"guildSlug,omitempty"`
 	GuildOnlineCount int    `json:"guildOnlineCount"`
 }
 

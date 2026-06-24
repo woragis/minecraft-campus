@@ -4,10 +4,12 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
+	"strings"
 	"sync"
 	"time"
 
 	"github.com/df-mc/dragonfly/server/player"
+	"github.com/df-mc/dragonfly/server/player/title"
 	"github.com/df-mc/dragonfly/server/world"
 )
 
@@ -72,7 +74,7 @@ func (g *JoinGate) Handle(p *player.Player) {
 	}
 	g.sessions.Store(p, sess)
 	p.Handle(&presenceHandler{gate: g, player: p, session: sess})
-	g.pushHUD(ctx, p, sess)
+	g.welcomeJoin(ctx, p, sess)
 }
 
 func (g *JoinGate) onQuit(sess playerSession) {
@@ -139,6 +141,17 @@ func (g *JoinGate) hudLoop() {
 	}
 }
 
+func (g *JoinGate) welcomeJoin(ctx context.Context, p *player.Player, sess playerSession) {
+	hud, err := g.client.FetchHUD(ctx, sess.PlayerID)
+	if err != nil {
+		g.log.Debug("hud fetch failed", "player", sess.Username, "err", err)
+		return
+	}
+	sendJoinTitle(p, hud)
+	p.Message(joinWelcomeMessage(hud))
+	p.SendTip(formatHUDTip(hud))
+}
+
 func (g *JoinGate) pushHUD(ctx context.Context, p *player.Player, sess playerSession) {
 	hud, err := g.client.FetchHUD(ctx, sess.PlayerID)
 	if err != nil {
@@ -148,6 +161,50 @@ func (g *JoinGate) pushHUD(ctx context.Context, p *player.Player, sess playerSes
 	p.SendTip(formatHUDTip(hud))
 }
 
+func sendJoinTitle(p *player.Player, hud *HUDResult) {
+	if hud == nil {
+		return
+	}
+	if strings.EqualFold(hud.AffiliationType, "guest") {
+		p.SendTitle(title.New("Visitante").WithSubtitle("Bem-vindo ao CampusWorld"))
+		return
+	}
+	subtitle := "Bem-vindo ao CampusWorld"
+	if label := affiliationLabel(hud); label != "" {
+		subtitle = label
+	}
+	p.SendTitle(title.New("CampusWorld").WithSubtitle(subtitle))
+}
+
+func joinWelcomeMessage(hud *HUDResult) string {
+	if hud == nil {
+		return "Bem-vindo ao CampusWorld!"
+	}
+	if strings.EqualFold(hud.AffiliationType, "guest") {
+		return "Você entrou como visitante. Explore o campus com calma."
+	}
+	if label := affiliationLabel(hud); label != "" {
+		return fmt.Sprintf("Bem-vindo, %s! Use /campus link para conectar sua conta ao site.", label)
+	}
+	return "Bem-vindo ao CampusWorld! Use /campus link para conectar sua conta ao site."
+}
+
+func affiliationLabel(hud *HUDResult) string {
+	if hud == nil {
+		return ""
+	}
+	if strings.EqualFold(hud.AffiliationType, "guest") {
+		return "Visitante"
+	}
+	if hud.CourseAbbr != "" {
+		return hud.CourseAbbr
+	}
+	if hud.CourseName != "" {
+		return hud.CourseName
+	}
+	return ""
+}
+
 func formatHUDTip(hud *HUDResult) string {
 	if hud == nil {
 		return ""
@@ -155,6 +212,9 @@ func formatHUDTip(hud *HUDResult) string {
 	line := hud.Username
 	if hud.Status != "" {
 		line += " · " + hud.Status
+	}
+	if label := affiliationLabel(hud); label != "" {
+		line += " · " + label
 	}
 	if hud.GuildName != "" {
 		line += " · " + hud.GuildName
