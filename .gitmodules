@@ -7,3 +7,6 @@
 [submodule "plugin"]
 	path = plugin
 	url = git@github.com:woragis/minecraft-campus-plugin.git
+[submodule "bedrock"]
+	path = bedrock
+	url = git@github.com:woragis/minecraft-campus-bedrock.git

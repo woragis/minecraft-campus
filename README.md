@@ -11,7 +11,7 @@ Este projeto usa **git submodules**:
 | [`backend/`](backend/) | [minecraft-campus-backend](https://github.com/woragis/minecraft-campus-backend) | API Spring Boot, trust engine, analytics |
 | [`frontend/`](frontend/) | [minecraft-campus-frontend](https://github.com/woragis/minecraft-campus-frontend) | Site Next.js — perfis, guildas, dashboard |
 | [`plugin/`](plugin/) | [minecraft-campus-plugin](https://github.com/woragis/minecraft-campus-plugin) | Plugin Paper — whitelist, convites, claims |
-| [`bedrock/`](bedrock/) | *(neste repo)* | Servidor Dragonfly — Bedrock nativo (Mundo 1) |
+| [`bedrock/`](bedrock/) | [minecraft-campus-bedrock](https://github.com/woragis/minecraft-campus-bedrock) | Servidor Dragonfly — Bedrock nativo (Mundo 1) |
 
 ## Documentação
 
@@ -46,7 +46,7 @@ faculdade/
 ├── CAMPUSWORLD.md
 ├── README.md
 ├── backend/      # submodule — API Go
-├── bedrock/      # Dragonfly Bedrock (Mundo 1)
+├── bedrock/      # submodule — Dragonfly Bedrock (Mundo 1)
 ├── frontend/     # submodule
 └── plugin/       # submodule — Paper + Geyser cross-play
 ```
